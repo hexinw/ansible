@@ -1,0 +1,4 @@
+[small_es_master_data_nodes]
+node01 ansible_host=<node01 IP>
+node02 ansible_host=<node02 IP>
+node03 ansible_host=<node03 IP>

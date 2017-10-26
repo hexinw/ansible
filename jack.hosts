@@ -1,0 +1,4 @@
+[jack_es_master_data_nodes]
+node01 ansible_host=10.4.244.51
+node02 ansible_host=10.4.244.52
+node03 ansible_host=10.4.244.53

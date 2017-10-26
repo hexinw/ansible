@@ -1,0 +1,18 @@
+[jerry_es_data_nodes]
+node01 ansible_host=10.4.244.41
+node02 ansible_host=10.4.244.42
+node03 ansible_host=10.4.244.43
+node04 ansible_host=10.4.244.44
+node05 ansible_host=10.4.244.45
+
+[jerry_es_master_nodes]
+node06 ansible_host=10.4.244.47
+node07 ansible_host=10.4.244.48
+node08 ansible_host=10.4.244.49
+
+[jerry_es_coordinator_nodes]
+node09 ansible_host=10.4.244.40
+node10 ansible_host=10.4.244.50
+
+[jerry_es_kibana]
+node01 ansible_host=10.4.244.41

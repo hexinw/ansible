@@ -1,0 +1,197 @@
+---
+
+- hosts: elasticsearch_master_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "node1", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 2, network.host: "0.0.0.0", cluster.name: "dotnext-es-demo", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "8g"
+    es_major_version: "5.x"
+    es_version: "5.4.0"
+
+- hosts: small_es_master_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "es1", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 2, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "8g"
+    es_major_version: "5.x"
+    es_version: "5.4.0"
+
+- hosts: small_es_kibana
+  roles:
+    - { role: kibana, kibana_server_host: node01 }
+
+- hosts: es_master_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "jerry", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03, node04, node05", discovery.zen.minimum_master_nodes: 3, gateway.recover_after_nodes: 3, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "4g"
+    es_major_version: "5.x"
+    es_version: "5.4.0"
+    es_plugins:
+      - name: elasticsearch-sql
+        plugin: https://github.com/NLPchina/elasticsearch-sql/releases/download/5.4.1.0/elasticsearch-sql-5.4.1.0.zip
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: es_kibana
+  roles:
+    - { role: kibana, kibana_server_host: node01, kibana_manage_plugins: true }
+
+- hosts: tom_es_master_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "jerry", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03, node04, node05", discovery.zen.minimum_master_nodes: 3, gateway.recover_after_nodes: 3, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on, thread_pool.bulk.size: 10, indices.memory.index_buffer_size: "10%"  } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "8g"
+    es_major_version: "5.x"
+    es_version: "5.4.0"
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: tom_es_kibana
+  roles:
+    - { role: kibana, kibana_server_host: node01, kibana_manage_plugins: true }
+
+- hosts: jerry_es_master_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "jerry", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03, node04, node05, node06, node07, node08, node09, node10", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 3, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: false, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on, indices.memory.index_buffer_size: "10%" } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "8g"
+    es_major_version: "5.x"
+    es_version: "5.4.0"
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: jerry_es_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "jerry", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03, node04, node05, node06, node07, node08, node09, node10", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 3, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: false, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on, indices.memory.index_buffer_size: "10%" } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "31g"
+    es_major_version: "5.x"
+    es_version: "5.4.0"
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: jerry_es_coordinator_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "jerry", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03, node04, node05, node06, node07, node08, node09, node10", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 3, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: false, node.master: false, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on, indices.memory.index_buffer_size: "10%" } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "15g"
+    es_major_version: "5.x"
+    es_version: "5.4.0"
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: jack_es_master_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "jerry", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 2, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on, thread_pool.bulk.size: 6, indices.memory.index_buffer_size: "10%", xpack.security.enabled: false  } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "10g"
+    es_major_version: "5.x"
+    es_version: "5.4.3"
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: wendy_es_master_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "jerry", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 2, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on, thread_pool.bulk.size: 6, indices.memory.index_buffer_size: "10%"  } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "10g"
+    es_major_version: "5.x"
+    es_version: "5.4.0"
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: wendy_es_kibana
+  roles:
+    - { role: kibana, kibana_server_host: node01, kibana_manage_plugins: false }
+
+- hosts: bob_es_master_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "jerry", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 2, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on, thread_pool.bulk.size: 6, indices.memory.index_buffer_size: "10%" } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "8g"
+    es_major_version: "5.x"
+    es_version: "5.5.2"
+    es_enable_xpack: false
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: bob_es_kibana
+  roles:
+    - { role: kibana, kibana_server_host: node01, kibana_manage_plugins: true }
+
+- hosts: steve_es_master_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "es-dev", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01", discovery.zen.minimum_master_nodes: 1, gateway.recover_after_nodes: 1, network.host: "0.0.0.0", cluster.name: "es-dev", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.security-6,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on, reindex.remote.whitelist: "10.4.245.19:9200" } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "256m"
+    es_major_version: "5.x"
+    es_version: "5.4.2"
+
+- hosts: ryan_es_master_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "ryan", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03, node04, node05, node06, node07, node08, node09, node10", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 3, network.host: "0.0.0.0", cluster.name: "es-prod", http.port: 9200, transport.tcp.port: 9300, node.data: false, node.master: true, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "15g"
+    es_major_version: "5.x"
+    es_version: "5.4.2"
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: ryan_es_data_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "ryan", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03, node04, node05, node06, node07, node08, node09, node10", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 3, network.host: "0.0.0.0", cluster.name: "es-prod", http.port: 9200, transport.tcp.port: 9300, node.data: true, node.master: false, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "15g"
+    es_major_version: "5.x"
+    es_version: "5.4.2"
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme
+
+- hosts: ryan_es_coordinator_nodes
+  roles:
+    - { role: elasticsearch, es_instance_name: "ryan", es_data_dirs: "/elastic/data", es_log_dir: "/elastic/log", es_config: { discovery.zen.ping.unicast.hosts: "node01, node02, node03, node04, node05, node06, node07, node08, node09, node10", discovery.zen.minimum_master_nodes: 2, gateway.recover_after_nodes: 3, network.host: "0.0.0.0", cluster.name: "es-prod", http.port: 9200, transport.tcp.port: 9300, node.data: false, node.master: false, bootstrap.memory_lock: true, action.destructive_requires_name: true, action.auto_create_index: "+*marvel-*,+zmkm8_metric*,+zmkm8_event*,+pulsehd_*,.security,.monitoring*,.watches,.triggered_watches,.watcher-history*,+rally-metrics-*,+rally-races-*,+rally-results-*,-*", script.inline: on, script.stored: on, script.engine.groovy.inline.aggs: on, script.engine.groovy.inline.update: on } }
+  vars:
+    es_scripts: false
+    es_templates: false
+    es_heap_size: "15g"
+    es_major_version: "5.x"
+    es_version: "5.4.2"
+    es_enable_xpack: true
+    es_api_basic_auth_username: elastic
+    es_api_basic_auth_password: changeme

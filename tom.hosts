@@ -1,0 +1,9 @@
+[tom_es_master_data_nodes]
+node01 ansible_host=10.4.244.61
+node02 ansible_host=10.4.244.62
+node03 ansible_host=10.4.244.63
+node04 ansible_host=10.4.244.64
+node05 ansible_host=10.4.244.65
+
+[tom_es_kibana]
+node01 ansible_host=10.4.244.61

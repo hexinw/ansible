@@ -1,0 +1,18 @@
+[ryan_es_data_nodes]
+node01 ansible_host=10.4.244.91
+node02 ansible_host=10.4.244.92
+node03 ansible_host=10.4.244.93
+node04 ansible_host=10.4.244.94
+node05 ansible_host=10.4.244.95
+
+[ryan_es_master_nodes]
+node06 ansible_host=10.4.244.96
+node07 ansible_host=10.4.244.98
+node08 ansible_host=10.4.244.99
+
+[ryan_es_coordinator_nodes]
+node09 ansible_host=10.4.244.101
+node10 ansible_host=10.4.244.102
+
+[ryan_es_kibana]
+node09 ansible_host=10.4.244.101

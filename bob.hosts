@@ -1,0 +1,7 @@
+[bob_es_master_data_nodes]
+node01 ansible_host=10.4.244.57
+node02 ansible_host=10.4.244.58
+node03 ansible_host=10.4.244.59
+
+[bob_es_kibana]
+node01 ansible_host=10.4.244.57

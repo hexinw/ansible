@@ -1,0 +1,7 @@
+[wendy_es_master_data_nodes]
+node01 ansible_host=10.4.244.81
+node02 ansible_host=10.4.244.82
+node03 ansible_host=10.4.244.83
+
+[wendy_es_kibana]
+node01 ansible_host=10.4.244.81

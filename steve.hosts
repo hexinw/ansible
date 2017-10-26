@@ -1,0 +1,2 @@
+[steve_es_master_data_nodes]
+node01 ansible_host=10.4.244.78
